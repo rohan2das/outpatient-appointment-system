@@ -14,6 +14,7 @@ import java.util.Optional;
 
 @RestController
 @RequestMapping("/api/doctors")
+@CrossOrigin(origins = "http://localhost:3000")
 public class DoctorController {
 
     private final DoctorService doctorService;

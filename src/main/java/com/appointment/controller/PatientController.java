@@ -14,6 +14,7 @@ import java.util.Optional;
 
 @RestController
 @RequestMapping("/api/patients")
+@CrossOrigin(origins = "http://localhost:3000")
 public class PatientController {
 
     private final PatientService patientService;
@@ -26,9 +27,53 @@ public class PatientController {
     }
 
     @PostMapping
-    public ResponseEntity<Patient> createPatient(@RequestBody Patient patient) {
-        Patient createdPatient = patientService.createPatient(patient);
-        return new ResponseEntity<>(createdPatient, HttpStatus.CREATED);
+    public ResponseEntity<?> createPatient(@RequestBody Patient patient) {
+        // Validate that user is provided
+        if (patient.getUser() == null || patient.getUser().getId() == null) {
+            return new ResponseEntity<>(
+                new ErrorResponse("User ID is required. Please provide a valid user ID."),
+                HttpStatus.BAD_REQUEST
+            );
+        }
+        
+        // Validate that user exists
+        Optional<User> user = userService.getUserById(patient.getUser().getId());
+        if (user.isEmpty()) {
+            return new ResponseEntity<>(
+                new ErrorResponse("User with ID " + patient.getUser().getId() + " not found."),
+                HttpStatus.BAD_REQUEST
+            );
+        }
+        
+        // Set the full user object
+        patient.setUser(user.get());
+        
+        try {
+            Patient createdPatient = patientService.createPatient(patient);
+            return new ResponseEntity<>(createdPatient, HttpStatus.CREATED);
+        } catch (Exception e) {
+            return new ResponseEntity<>(
+                new ErrorResponse("Error creating patient: " + e.getMessage()),
+                HttpStatus.INTERNAL_SERVER_ERROR
+            );
+        }
+    }
+    
+    // Inner class for error responses
+    private static class ErrorResponse {
+        private String message;
+        
+        public ErrorResponse(String message) {
+            this.message = message;
+        }
+        
+        public String getMessage() {
+            return message;
+        }
+        
+        public void setMessage(String message) {
+            this.message = message;
+        }
     }
 
     @GetMapping

@@ -16,6 +16,7 @@ import java.util.Optional;
 
 @RestController
 @RequestMapping("/api/availability")
+@CrossOrigin(origins = "http://localhost:3000")
 public class AvailabilityDatesController {
 
     private final AvailabilityDatesService availabilityDatesService;

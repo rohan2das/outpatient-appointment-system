@@ -53,7 +53,30 @@ spring.datasource.password=your_password
 ./mvnw spring-boot:run
 ```
 
-The application will start on `http://localhost:8080`
+The application will start on `http://localhost:7007` (configured in application.properties)
+
+## Frontend Application
+
+A modern React frontend is included in the `frontend/` directory. See [frontend/README.md](frontend/README.md) for detailed setup instructions.
+
+### Quick Start (Frontend)
+
+1. Navigate to the frontend directory:
+```bash
+cd frontend
+```
+
+2. Install dependencies:
+```bash
+npm install
+```
+
+3. Start the development server:
+```bash
+npm run dev
+```
+
+The frontend will be available at `http://localhost:3000`
 
 ## API Documentation
 

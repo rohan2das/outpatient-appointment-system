@@ -18,6 +18,7 @@ import java.util.Optional;
 
 @RestController
 @RequestMapping("/api/appointments")
+@CrossOrigin(origins = "http://localhost:3000")
 public class AppointmentController {
 
     private final AppointmentService appointmentService;
